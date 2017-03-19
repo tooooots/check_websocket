@@ -1,0 +1,5 @@
+set-gopath
+.gitconfig
+bin
+pkg
+src

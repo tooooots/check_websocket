@@ -8,12 +8,14 @@ import (
 	"net/url"
 )
 
+var scheme = flag.String("scheme", "wss", "Websocket scheme (default to secure)")
 var addr = flag.String("addr", "echo.websocket.org", "http service address")
+var path = flag.String("path", "/", "URI path")
 
 func main() {
 	flag.Parse()
 
-	u := url.URL{Scheme: "wss", Host: *addr, Path: "/"}
+	u := url.URL{Scheme: *scheme, Host: *addr, Path: *path}
 
 	// Initialize the check - this will return an UNKNOWN result
 	// until more results are added.

@@ -8,9 +8,11 @@ import (
 	"net/url"
 )
 
-var scheme = flag.String("scheme", "wss", "Websocket scheme (default to secure)")
-var addr = flag.String("addr", "echo.websocket.org", "http service address")
-var path = flag.String("path", "/", "URI path")
+var (
+	scheme = flag.String("scheme", "wss", "Websocket scheme (default to secure)")
+	addr   = flag.String("addr", "echo.websocket.org", "http service address")
+	path   = flag.String("path", "/", "URI path")
+)
 
 func main() {
 	flag.Parse()
@@ -29,20 +31,17 @@ func main() {
 	if err != nil {
 		check.Criticalf("Cannot connect to websocket")
 		log.Fatal("dial:", err)
-	} else {
-		log.Println("connected")
 	}
+	log.Println("connected")
 	defer c.Close()
 
 	// close the connection
 	log.Println("Requesting connection closure")
 	err = c.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
 	if err != nil {
-		log.Println("write close:", err)
 		check.Criticalf("Error while closing websocket")
-		return
-	} else {
-		check.AddResult(nagiosplugin.OK, "Websocket server is working correctly")
+		log.Fatal("write close:", err)
 	}
+	check.AddResult(nagiosplugin.OK, "Websocket server is working correctly")
 
 }
